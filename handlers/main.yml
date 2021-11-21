@@ -1,0 +1,5 @@
+---
+- name: reboot_after_update
+  reboot:
+  when:
+    - _post.reboot_after_update

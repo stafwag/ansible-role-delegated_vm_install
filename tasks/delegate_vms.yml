@@ -1,0 +1,366 @@
+
+- name: Show delegated_vm_install
+  debug:
+    msg:
+      - "Show delegated_vm_install: {{ delegated_vm_install }}"
+  tags:
+    - never
+    - debug
+
+# Create a copy of the vm hash
+- name: Create temporary _vm
+  set_fact:
+    _vm: "{{ delegated_vm_install.vm | default({}) }}"
+
+- name: Show _vm
+  debug:
+    msg: "_vm = {{ _vm }}"
+  tags:
+    - never
+    - debug
+
+- name: Show delegated_vm_install_overwrite.vm
+  debug:
+    msg: "delegated_vm_install_overwrite.vm  = {{ delegated_vm_install_overwrite }}"
+  tags:
+    - never
+    - debug
+  when:
+    - delegated_vm_install_overwrite is defined
+    - delegated_vm_install_overwrite.vm is defined
+
+# Overwrite if delegated_vm_install is defined
+# to be able to overwrite the values on a single vm
+- name: overwrite vm
+  set_fact:
+      _vm: "{{ _vm | combine( delegated_vm_install_overwrite.vm ) }}"
+  when:
+    - delegated_vm_install_overwrite is defined
+    - delegated_vm_install_overwrite.vm is defined
+
+- name: Show the result _vm
+  debug:
+    msg: "_vm = {{ _vm }}"
+  tags:
+    - never
+    - debug
+
+- name: Fail if boot_disk.src is not defined
+  fail:
+    msg:
+      - "Sorry I need a source image"
+  when:
+    - _vm.boot_disk.src is not defined
+
+- name: Fail if gateway is not defined
+  fail:
+    msg:
+      - "Sorry I need a gateway"
+  when:
+    - _vm.gateway is not defined
+
+- name: Set _hostname
+  set_fact:
+    _hostname:
+      "{{ _vm.hostname | default(inventory_hostname) }}"
+
+- name: debug
+  debug:
+    msg:
+      - "_hostname = {{ _hostname }}"
+  tags:
+    - never
+    - debug
+
+# Create _security hash with permission settngs.
+- name: Set default security settings
+  set_fact:
+    _security:
+      file:
+        owner:
+          root
+        group:
+          kvm
+        mode:
+          660
+      dir:
+        owner:
+          root
+        group:
+          root
+        mode:
+          751
+
+# Get the defined security settings
+- name: Set _defined_security
+  set_fact:
+    _defined_security:
+      "{{ delegated_vm_install.security | default({}) }}"
+
+- name: Overwrite the _defined_security
+  set_fact:
+    _defined_security:
+      "{{ _defined_security | combine(delegated_vm_install_overwrite.security) }}" 
+  when:
+    - delegated_vm_install_overwrite is defined
+    - delegated_vm_install_overwrite.security is defined
+
+# Combine the security hashes, when the security settings aren't defined
+# by the user the default values are used.
+- name: Combine the security hashes
+  set_fact:
+    _security:
+      "{{ _security | combine(_defined_security) }}"
+
+- name: debug
+  debug:
+    msg:
+      - "_security = {{ _security }}"
+  tags:
+    - never
+    - debug
+
+# Get the defined post actions
+- name: Set the default post actions
+  set_fact:
+    _post:
+      pause:
+        seconds:
+          5
+      update_etc_hosts:
+        True
+      ensure_running:
+        True
+      package_update:
+        True
+      reboot_after_update:
+        True
+
+- name: Get the defined post actions
+  set_fact:
+    _defined_post:
+      "{{ delegated_vm_install.post | default({}) }}"
+
+- name: Overwrite the _defined_post
+  set_fact:
+    _defined_post:
+      "{{ _defined_post | combine(delegated_vm_install_overwrite.post) }}" 
+  when:
+    - delegated_vm_install_overwrite is defined
+    - delegated_vm_install_overwrite.post is defined
+
+# Combine the security hashes, when the security settings aren't defined
+# by the user the default values are used.
+- name: Combine the post hashes
+  set_fact:
+    _post:
+      "{{ _post | combine(_defined_post) }}"
+
+- name: debug
+  debug:
+    msg:
+      - "_post = {{ _post }}"
+  tags:
+    - never
+    - debug
+
+# Create an array with the qemu_disks
+# The boot_disk is the first disk.
+- name: Create _qemu_img array
+  set_fact:
+    _qemu_img:
+      - dest:
+          "{{ _vm.path }}/{{ _hostname }}.qcow2"
+        format:
+          qcow2
+        src:
+          "{{ _vm.boot_disk.src }}"
+        size:
+          "{{ _vm.boot_disk.size | default('100G') }}"
+        owner:
+          "{{ _security.file.owner }}"
+        group:
+          "{{ _security.file.group }}"
+        mode:
+          "{{ _security.file.mode }}"
+
+- name: Loop over the additional disks
+  include_tasks: add_disk.yml
+  loop: "{{ _vm.disks }}"
+  loop_control:
+    loop_var: _disk
+
+- name: Display the _qemu_img array
+  debug:
+    msg:
+      "_qemu_img = {{ _qemu_img }}"
+  tags:
+    - never
+    - debug
+
+- name: Create _disk_strings array
+  set_fact:
+    _disk_strings: 
+      - "{{ _vm.path }}/{{ _hostname }}_cloudinit.iso,device=cdrom"
+
+- name: Loop over the qemu disk
+  include_tasks: add_disk_string.yml
+  loop: "{{ _qemu_img }}"
+  loop_control:
+    loop_var: _qemu_disk
+
+- name: Display the _disk_strings array
+  debug:
+    msg:
+      "_disk_strings = {{ _disk_strings }}"
+  tags:
+    - never
+    - debug
+
+# Create the default user hash
+- name: Set the defaults for the _default_user
+  set_fact:
+    _default_user:
+      name: "{{ ansible_user | default(false) }}"
+      passwd: "!!"
+      ssh_authorized_keys: ""
+
+- name: Set the _defined_default_user
+  set_fact:
+    _defined_default_user:
+      "{{ _vm.default_user | default({}) }}"
+
+- name: Overwrite the _defined_default_user
+  set_fact:
+    _defined_default_user:
+      "{{ _defined_default_user | combine(delegated_vm_install_overwrite.default_user) }}" 
+  when:
+    - delegated_vm_install_overwrite is defined
+    - delegated_vm_install_overwrite.default_user is defined
+
+- name: Overwite default_user the values
+  set_fact:
+    _default_user:
+      "{{ _default_user | combine(_defined_default_user) }}"
+
+# Create the vm return hash
+- name: Set required vm variables
+  set_fact:
+    vm:
+      hostname:
+        "{{ _hostname }}"
+      ip_address:
+        "{{ vm_ip_address }}"
+      path:
+        "/var/lib/libvirt/images/"
+      reboot:
+        False
+      poweroff:
+        True
+      commands:
+        []
+      wait:
+        -1
+      qemu_img:
+        "{{ _qemu_img }}"
+      virt_install_import:
+        disks:
+          "{{ _disk_strings }}"
+
+- name: Display vm
+  debug:
+    msg:
+      "vm = {{ vm }}"
+  tags:
+    - never
+    - debug
+
+- name: Display _vm
+  debug:
+    msg:
+      "vm = {{ vm }}"
+  tags:
+    - never
+    - debug
+
+# Overwrite the provided vm data
+- name: Combine vm and _vm
+  set_fact:
+    vm: "{{ vm | combine( _vm ) }}"
+
+- name: Merge default_user
+  set_fact:
+    vm: "{{ vm | combine( { 'default_user': _default_user } ) }}" 
+
+- name: Display the default user name
+  debug:
+    msg:
+      - "default user name = {{ vm.default_user.name }}"
+
+- name: Verify if we have a default user name 
+  fail:
+    msg: "Sorry, we need to have a default user name."
+  when:
+    - not vm.default_user.name
+
+- name: Show the result vm
+  debug:
+    msg: "vm = {{ vm }}"
+  tags:
+    - never
+    - debug
+
+# load the template
+- name: Load the vm template
+  include_vars:
+    "{{ _vm.template | default('templates/vms/debian_vm_template.yml') }}"
+
+- name: Display cloud_localds debug info
+  debug:
+    msg:
+      - "cloud_localds = {{ cloud_localds }}"
+  tags:
+    - never
+    - debug
+
+#
+# Create the vm destination directory if not exists
+#
+- name: "Verify if {{ vm.path }} exists"
+  stat:
+    path:
+      "{{ vm.path }}"
+  register:
+    stat_vm_path
+
+- name: "Create {{ vm.path }}"
+  file:
+    path:
+      "{{ vm.path }}"
+    owner:
+      "{{ _security.dir.owner }}"
+    group:
+      "{{ _security.dir.group }}"
+    mode:
+      "{{ _security.dir.mode }}"
+    recurse: yes
+  when:
+    - not stat_vm_path.stat.exists
+
+- name: include it
+  import_role: 
+    name:
+      stafwag.virt_install_vm
+
+- name: Pause the play
+  pause:
+    "{{ _post.pause }}"
+  when:
+    - _post.pause
+
+- name: Ensure that the vm is running
+  virt:
+    name: "{{ vm.hostname }}"
+    state: running
+  when:
+    - _post.ensure_running

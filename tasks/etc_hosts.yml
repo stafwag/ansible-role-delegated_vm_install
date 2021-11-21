@@ -1,0 +1,24 @@
+---
+- name: Display the hostname
+  debug:
+    msg: "{{ inventory_hostname }}"
+  tags:
+    - debug
+    - never
+
+- name: set the hostname
+  hostname:
+    name: 
+      "{{ inventory_hostname }}"
+
+- name: Setup the etc_hosts var
+  set_fact:
+    etc_hosts:
+       hosts:
+         - { name: "debian.*", ip: "127.0.1.1", state: "absent" }
+         - { name: "{{ inventory_hostname }}", ip: "{{ ansible_default_ipv4.address }}", state: "present" }
+
+- name: Include etc_hosts role
+  include_role:
+    name:
+      stafwag.etc_hosts

@@ -1,0 +1,40 @@
+---
+- name: Verify if vm_kvm_host is defined
+  fail:
+    msg:
+      - "Sorry, I need the vm_kvm_host variable to continue"
+  when:
+    - vm_kvm_host is not defined
+
+- name: Install the virtual machines
+  import_tasks: delegate_vms.yml
+  delegate_to: "{{ vm_kvm_host }}"
+
+- name: Wait for the nodes to come online
+  include_tasks: wait.yml
+
+- name: Update etc_hosts
+  block:
+    - name: Gather facts
+      setup:
+
+    - name: Setup etc hosts
+      include_tasks: etc_hosts.yml
+  when:
+    - _post.update_etc_hosts
+
+- name: Update the all packages
+  import_role:
+    name:
+      stafwag.package_update
+  notify:
+      reboot_after_update
+  when:
+    - _post.package_update
+
+- name: Flush handlers to force the reboot handler
+  meta:
+    flush_handlers
+
+- name: Wait for the nodes to come online
+  include_tasks: wait.yml

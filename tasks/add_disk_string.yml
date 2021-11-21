@@ -1,0 +1,35 @@
+---
+- name: Display _qemu_disk
+  debug:
+    msg:
+      - "_qemu_disk = {{ _qemu_disk }}"
+  tags:
+    - never
+    - debug
+
+- name: Create disk string
+  set_fact:
+    _disk_string:
+      "{{ _qemu_disk.dest }},device=disk"
+
+- name: Display _disk_string
+  debug:
+    msg:
+      "_disk_string = {{ _disk_string }}"
+  tags:
+    - never
+    - debug
+
+- name: Add the disk to _disk_strings
+  set_fact:
+    _disk_strings:
+      "{{ _disk_strings }} + [ '{{ _disk_string }}' ]"
+
+
+- name: Display _disk_strings
+  debug:
+    msg:
+      "_disk_strings = {{ _disk_strings }}"
+  tags:
+    - never
+    - debug
