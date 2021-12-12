@@ -7,7 +7,7 @@ This role is designed to delegate the install to a libvirt hypervisor.
 
 ## Requirements
 
-The role is wrapper around the following roles:
+The role is a wrapper around the following roles:
 
   * **stafwag.libvirt**:
     [https://github.com/stafwag/ansible-role-libvirt](https://github.com/stafwag/ansible-role-libvirt)
@@ -41,7 +41,7 @@ Or follow the installation instruction for each role on Ansible Galaxy.
 It should work on most GNU/Linux distributions.
 ```cloud-cloudds``` is required. ```cloud-clouds``` was available on
 Centos/RedHat 7 but not on Redhat 8. You'll need to install it manually
-to use it role on Centos/RedHat 8.
+to use the role on Centos/RedHat 8.
 
 * Archlinux
 * Debian
@@ -61,8 +61,8 @@ to use it role on Centos/RedHat 8.
 ## Input
 
 The ```delegated_vm_install``` hash is used for the defaults to set up the virtual machine.
-If you need to overwrite for a virtual machne or hosts group, you can use the ```delegated_vm_install_overwrite``` hash.
-Both hashes will be merged, if a variabele is in both hashes the values of ```delegated_vm_install_overwrite``` is used.
+If you need to overwrite for a virtual machine or hosts group, you can use the ```delegated_vm_install_overwrite``` hash.
+Both hashes will be merged, if a variable is in both hashes the values of ```delegated_vm_install_overwrite``` is used.
 
 
 * **delegated_vm_install**:
@@ -99,8 +99,6 @@ Both hashes will be merged, if a variabele is in both hashes the values of ```de
       * **poweroff**: Optional. Default: true. Poweroff The vm after cloud-init is completed
       * **wait:** Optional. Default: ```-1```. The wait argument passed to ```virt-install```. A negative value will wait till The vm is shutdown. ```0``` will execut the ```virt-install``` command and disconnect
       * **commands:** Optional. Default ```[]```. List of commands to be executed duing the ```cloud-init``` phase.
-
-\
 
 * **delegated_vm_install_overwrite**:
     The overwrite hash.
