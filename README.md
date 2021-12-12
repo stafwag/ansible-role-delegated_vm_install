@@ -39,7 +39,7 @@ Or follow the installation instruction for each role on Ansible Galaxy.
 ### Supported GNU/Linux Distributions
 
 It should work on most GNU/Linux distributions.
-```cloud-cloudds``` is required. ```cloud-clouds``` was available on
+```cloud-localds``` is required. ```cloud-localds``` was available on
 Centos/RedHat 7 but not on Redhat 8. You'll need to install it manually
 to use the role on Centos/RedHat 8.
 
