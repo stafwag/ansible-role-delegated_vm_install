@@ -51,7 +51,7 @@ to use the role on Centos/RedHat 8.
 
 ## Role Variables and templates
 
-# Variabeles
+# Variables
 
 ## Virtual Machine specific
 
@@ -103,7 +103,7 @@ Both hashes will be merged, if a variable is in both hashes the values of ```del
 * **delegated_vm_install_overwrite**:
     The overwrite hash.
 
-## Return variabeles
+## Return variables
 
 * **vm**:
   * **hostname**: The virtual machine hostname.
