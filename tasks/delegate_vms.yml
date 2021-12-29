@@ -135,6 +135,8 @@
         True
       reboot_after_update:
         True
+      always:
+        False
 
 - name: Get the defined post actions
   set_fact:
@@ -352,11 +354,20 @@
     name:
       stafwag.virt_install_vm
 
+- name: Display virt_install_vm_installed
+  debug:
+    msg:
+      - "virt_install_vm_installed: {{ virt_install_vm_installed }}"
+  tags:
+    - never
+    - debug
+
 - name: Pause the play
   pause:
     "{{ _post.pause }}"
   when:
     - _post.pause
+    - virt_install_vm_installed
 
 - name: Ensure that the vm is running
   virt:

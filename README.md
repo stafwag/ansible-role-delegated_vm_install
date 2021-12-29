@@ -78,7 +78,12 @@ Both hashes will be merged, if a variable is in both hashes the values of ```del
     * **post**:
         * **pause**: Optional. Default: ```seconds: 10```
         * **update_etc_hosts** Optional. Default: ```true```
-        * **ensure_running** Optional. Default: ``true```
+        * **ensure_running** Optional. Default: ```true```
+        * **ensure_running** Optional. Default: ```true```
+        * **package_update** Optional. Default: ```true```
+        * **reboot_after_update** Optional. Default: ```true```
+        * **always** Optional. Default: ```false```
+
     * **vm**:
       * **template**: Optional. Default. ```templates/vms/debian_vm_template.yml``` The virtual machine template.
       * **hostname**: Optional. Default: ```{{ inventory_hostname }}```. The vm hostname.

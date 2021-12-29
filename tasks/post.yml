@@ -1,0 +1,22 @@
+- name: Update etc_hosts
+  block:
+    - name: Gather facts
+      setup:
+
+    - name: Setup etc hosts
+      include_tasks: etc_hosts.yml
+  when:
+    - _post.update_etc_hosts
+
+- name: Update the all packages
+  import_role:
+    name:
+      stafwag.package_update
+  notify:
+      reboot_after_update
+  when:
+    - _post.package_update
+
+- name: Flush handlers to force the reboot handler
+  meta:
+    flush_handlers
