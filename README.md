@@ -24,9 +24,34 @@ The role is a wrapper around the following roles:
   * **stafwag.package_update**:
     [https://github.com/stafwag/ansible-role-package_update](https://github.com/stafwag/ansible-role-package_update)
 
+# Installation
+
+## Ansible galaxy
+
+The role is available on [Ansible Galaxy](https://galaxy.ansible.com/stafwag/virt_install_import).
+
+To install the role from Ansible Galaxy execute the command below. 
+This will install the role with the dependencies.
+
+```bash
+ansible-galaxy install --force stafwag.delegated_vm_install
+```
+
+## Source Code
+
+If you want to use the source code directly.
+
+Clone the role source code.
+
+```bash
+$ git clone https://github.com/stafwag/ansible-role-virt_install_vm
+```
+
+and put into the [role search path](https://docs.ansible.com/ansible/2.4/playbooks_reuse_roles.html#role-search-path)
+
 Install the required roles with
 
-```
+```bash
 $ ansible-galaxy install -r requirements.yml
 ```
 
@@ -35,6 +60,7 @@ this will install the latest default branch releases.
 Or follow the installation instruction for each role on Ansible Galaxy.
 
 [https://galaxy.ansible.com/stafwag](https://galaxy.ansible.com/stafwag)
+
 
 ### Supported GNU/Linux Distributions
 
@@ -130,7 +156,7 @@ Create a inventory.
 
 * inventory_vms.yml
 
-```
+```yaml
 k3s_cluster:
   vars:
     ansible_user: staf
@@ -173,7 +199,7 @@ k3s_cluster:
 
 * create_vms.yml
 
-```
+```yaml
 ---
 - name: Setup the virtual machine
   hosts: k3s_cluster
@@ -187,7 +213,7 @@ k3s_cluster:
 
 ## Run the playbook
 
-```
+```yaml
 $ ansible-playbook -i inventory_vms.yml create_vms.yml
 ```
 
