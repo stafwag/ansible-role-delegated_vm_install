@@ -1,3 +1,13 @@
+---
+dependencies:
+  - src: stafwag.libvirt
+  - src: stafwag.qemu_img
+  - src: stafwag.cloud_localds
+  - src: stafwag.virt_install_import
+  - src: stafwag.virt_install_vm
+  - src: stafwag.etc_hosts
+  - src: stafwag.package_update
+
 galaxy_info:
   role_name: delegated_vm_install
   author: staf wagemakers <staf@wagemakers.be>
@@ -30,4 +40,3 @@ galaxy_info:
     - system
     - cloud-init
     - virtualization
-dependencies: []
