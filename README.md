@@ -34,7 +34,7 @@ To install the role from Ansible Galaxy execute the command below.
 This will install the role with the dependencies.
 
 ```bash
-ansible-galaxy install --force stafwag.delegated_vm_install
+ansible-galaxy install stafwag.delegated_vm_install
 ```
 
 ## Source Code
