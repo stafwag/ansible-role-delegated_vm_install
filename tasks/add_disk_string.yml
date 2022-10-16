@@ -23,8 +23,7 @@
 - name: Add the disk to _disk_strings
   set_fact:
     _disk_strings:
-      "{{ _disk_strings }} + [ '{{ _disk_string }}' ]"
-
+      "{{ _disk_strings + [ _disk_string ] }}"
 
 - name: Display _disk_strings
   debug:

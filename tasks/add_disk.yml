@@ -1,4 +1,11 @@
 ---
+- name: Display _qemu_img
+  debug:
+    msg: "_qemu_img = {{ _qemu_img }}"
+  tags:
+    - never
+    - debug
+
 - name: Display the disk
   debug:
     msg: "disk = {{ _disk }}"
@@ -29,4 +36,4 @@
 - name: Add the disk to the qemu_img array
   set_fact:
     _qemu_img:
-      "{{ _qemu_img }} + [ {{ _qemu_img_disk }} ]"
+      "{{ _qemu_img + [ _qemu_img_disk ] }}"

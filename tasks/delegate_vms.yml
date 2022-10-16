@@ -31,7 +31,7 @@
 
 # Overwrite if delegated_vm_install is defined
 # to be able to overwrite the values on a single vm
-- name: overwrite vm
+- name: Overwrite vm
   set_fact:
       _vm: "{{ _vm | combine( delegated_vm_install_overwrite.vm ) }}"
   when:
@@ -64,7 +64,7 @@
     _hostname:
       "{{ _vm.hostname | default(inventory_hostname) }}"
 
-- name: debug
+- name: Debug
   debug:
     msg:
       - "_hostname = {{ _hostname }}"
@@ -112,7 +112,7 @@
     _security:
       "{{ _security | combine(_defined_security) }}"
 
-- name: debug
+- name: Debug
   debug:
     msg:
       - "_security = {{ _security }}"
@@ -158,7 +158,7 @@
     _post:
       "{{ _post | combine(_defined_post) }}"
 
-- name: debug
+- name: Debug
   debug:
     msg:
       - "_post = {{ _post }}"
@@ -188,7 +188,7 @@
 
 - name: Loop over the additional disks
   include_tasks: add_disk.yml
-  loop: "{{ _vm.disks }}"
+  loop: "{{ _vm.disks | default([]) }}"
   loop_control:
     loop_var: _disk
 
@@ -349,7 +349,7 @@
   when:
     - not stat_vm_path.stat.exists
 
-- name: include it
+- name: Include it
   import_role: 
     name:
       stafwag.virt_install_vm

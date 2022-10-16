@@ -1,3 +1,4 @@
+---
 - name: Update etc_hosts
   block:
     - name: Gather facts
