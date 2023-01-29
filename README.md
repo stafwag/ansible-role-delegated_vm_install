@@ -5,6 +5,8 @@ and ```cloud-init```.
 
 This role is designed to delegate the install to a libvirt hypervisor.
 
+It allows you to specify the Linux/libvirt KVM host as part of the virtual machine definition.
+
 ## Requirements
 
 The role is a wrapper around the following roles:
