@@ -1,4 +1,28 @@
 ---
+- name: Post configuration started
+  debug:
+    msg:
+      - " ost configuration started"
+  tags:
+    - never
+    - debug
+
+- name: Display _post
+  debug:
+    msg:
+      - "_post: {{ _post }}"
+  tags:
+    - never
+    - debug
+
+- name: Display virt_install_vm_installed
+  debug:
+    msg:
+      - "virt_install_vm_installed: {{ virt_install_vm_installed }}"
+  tags:
+    - never
+    - debug
+
 - name: Update etc_hosts
   block:
     - name: Gather facts
@@ -8,6 +32,12 @@
       include_tasks: etc_hosts.yml
   when:
     - _post.update_etc_hosts
+
+- name: Update ssh known_hosts
+  include_tasks: update_ssh_known_hosts.yml
+  when:
+    - _post.update_ssh_known_hosts
+    - virt_install_vm_installed
 
 - name: Update the all packages
   import_role:

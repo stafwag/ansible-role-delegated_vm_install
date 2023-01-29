@@ -86,30 +86,46 @@ to use the role on Centos/RedHat 8.
 ## Input
 
 The ```delegated_vm_install``` hash is used for the defaults to set up the virtual machine.
-If you need to overwrite for a virtual machine or hosts group, you can use the ```delegated_vm_install_overwrite``` hash.
-Both hashes will be merged, if a variable is in both hashes the values of ```delegated_vm_install_overwrite``` is used.
+If you need to overwrite for a virtual machine or host group, you can use the ```delegated_vm_install_overwrite``` hash.
+Both hashes will be merged, if a variable is in both hashes the values of ```delegated_vm_install_overwrite``` are used.
 
 
 * **delegated_vm_install**:
     * **security**: Optional
         * **file**:
-          * **user**: Default: ```root```
+
+          The file permissions of the created images.
+          * **owner**: user Default: ```root```
           * **group**: Default: ```kvm```
           * **mode**: Default: ```660```
         * **dir**:
-          * **user**: Default: ```root```
-          * **group**: Defailt: ```root```
+
+          The directory permissions of the created images.
+          * **owner**: Default: ```root```
+          * **group**: Default: ```root```
           * **mode**: Default: ```0751```
     * **post**:
-        * **pause**: Optional. Default: ```seconds: 10```
+
+      Post actions on the created virtual machines. By default, the post actions are only executed when the virtual 
+      machine is created by the role. If the virtual machine already exists the post actions are skipped, unless 
+      **always** is set to ```true```.
+
+      The ssh host key is not updated by default. If you set ***update_ssh_known_hosts*** to ```true```, the ssh host
+      key of the virtual machine is updated to ```ansible_host``` in ```${HOME}/.ssh/known_hosts``` on the ansible host.
+
+        * **pause**: Optional. Default: ```seconds: 10``` Time to wait before executing the post actions.
         * **update_etc_hosts** Optional. Default: ```true```
         * **ensure_running** Optional. Default: ```true```
         * **ensure_running** Optional. Default: ```true```
         * **package_update** Optional. Default: ```true```
         * **reboot_after_update** Optional. Default: ```true```
         * **always** Optional. Default: ```false```
+        * **update_ssh_known_hosts** Optional. Default: ```false```
 
     * **vm**:
+
+      The virtual machine settings.
+
       * **template**: Optional. Default. ```templates/vms/debian_vm_template.yml``` The virtual machine template.
       * **hostname**: Optional. Default: ```{{ inventory_hostname }}```. The vm hostname.
       * **path**: Optional. Default: ```/var/lib/libvirt/images/```
@@ -130,8 +146,11 @@ Both hashes will be merged, if a variable is in both hashes the values of ```del
       * **wait:** Optional. Default: ```-1```. The wait argument passed to ```virt-install```. A negative value will wait till The vm is shutdown. ```0``` will execut the ```virt-install``` command and disconnect
       * **commands:** Optional. Default ```[]```. List of commands to be executed duing the ```cloud-init``` phase.
 
+
 * **delegated_vm_install_overwrite**:
-    The overwrite hash.
+
+    The overwrite hash. This allows you to overwrite the above settings. Can be useful to have specific global settings,
+    and overwrite values for a virtual machine.
 
 ## Return variables
 

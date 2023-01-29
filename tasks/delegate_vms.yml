@@ -137,6 +137,8 @@
         True
       always:
         False
+      update_ssh_known_hosts:
+        False
 
 - name: Get the defined post actions
   set_fact:
@@ -151,12 +153,28 @@
     - delegated_vm_install_overwrite is defined
     - delegated_vm_install_overwrite.post is defined
 
-# Combine the security hashes, when the security settings aren't defined
+- name: Debug _post before combime
+  debug:
+    msg:
+      - "_post = {{ _post }}"
+  tags:
+    - never
+    - debug
+
+- name: Debug _defined_post before combime
+  debug:
+    msg:
+      - "_defined_post = {{ _defined_post }}"
+  tags:
+    - never
+    - debug
+
+# Combine the post hashes, when the post settings aren't defined
 # by the user the default values are used.
 - name: Combine the post hashes
   set_fact:
     _post:
-      "{{ _post | combine(_defined_post) }}"
+      "{{ _post | combine(  _defined_post  ) }}"
 
 - name: Debug
   debug:

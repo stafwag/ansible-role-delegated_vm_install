@@ -1,0 +1,30 @@
+---
+- name: Debug display ansible host
+  debug:
+    msg:
+      - "ansible_host: {{ ansible_host }}"
+  tags:
+    - never
+    - debug
+
+#
+# Update ssh host key in known_hosts
+# Set become to false
+# ssh connection will be established as the "normal" ansible
+# user normally
+#
+#
+- name: Remove ssh host key in known_hosts
+  delegate_to: localhost
+  become: false
+  known_hosts:
+    name: "{{ ansible_host }}"
+    state: absent
+
+- name: Ping the hosts to update .ssh/known_hosts
+  delegate_to: localhost
+  become: false
+  vars:
+    ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+  ping:
+
