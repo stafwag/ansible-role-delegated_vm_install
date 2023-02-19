@@ -45,7 +45,6 @@ Or follow the installation instruction for each role on Ansible Galaxy.
 The role is available on [Ansible Galaxy](https://galaxy.ansible.com/stafwag/virt_install_import).
 
 To install the role from Ansible Galaxy execute the command below. 
-This will install the role with the dependencies.
 
 ```bash
 ansible-galaxy install stafwag.delegated_vm_install
@@ -136,8 +135,8 @@ Both hashes will be merged, if a variable is in both hashes the values of ```del
       * **size**: Optional. Default: ```100G ```
       * **disks** Optional array with [stafwag.qemu_img](https://github.com/stafwag/ansible-role-qemu_img) disks.
       * **default_user**: 
-        * **name**: Default: ```{{ ansible user }}```
-        * **passwd** : The password hash Default ```!!``` Set it to ```false``` to lock the user.
+        * **name**: Default: ```{{ ansible user }}``` if ```{{ ansible_user }}``` is not defined the environment variabele ```USER``` is used.
+        * **passwd** : Default: ```false```. Set it to ```false``` to lock the user.
         * **ssh_authorized_keys**: The ssh keys default ```""```
       * **dns_nameservers:**: Optional. Default: ```9.9.9.9```
       * **dns_search**: Optional. Default ```''```

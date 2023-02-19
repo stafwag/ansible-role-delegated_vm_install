@@ -241,9 +241,17 @@
 - name: Set the defaults for the _default_user
   set_fact:
     _default_user:
-      name: "{{ ansible_user | default(false) }}"
-      passwd: "!!"
+      name: "{{ ansible_user | default( lookup('env','USER') ) }}"
+      passwd: false
       ssh_authorized_keys: ""
+
+- name: DEBUG show _default_user
+  debug:
+    msg:
+      - "DEBUG _default_user = {{ _default_user }}"
+  tags:
+    - debug
+    - never
 
 - name: Set the _defined_default_user
   set_fact:
