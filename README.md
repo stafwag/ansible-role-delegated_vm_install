@@ -7,42 +7,11 @@ This role is designed to delegate the install to a libvirt hypervisor.
 
 It allows you to specify the Linux/libvirt KVM host as part of the virtual machine definition.
 
-## Requirements
-
-The role is a wrapper around the following roles:
-
-  * **stafwag.libvirt**:
-    [https://github.com/stafwag/ansible-role-libvirt](https://github.com/stafwag/ansible-role-libvirt)
-  * **stafwag.qemu_img**:
-    [https://github.com/stafwag/ansible-role-qemu_img](https://github.com/stafwag/ansible-role-qemu_img)
-  * **stafwag.cloud_localds**:
-    [https://github.com/stafwag/ansible-role-cloud_localds](https://github.com/stafwag/ansible-role-cloud_localds)
-  * **stafwag.virt_install_import**:
-    [https://github.com/stafwag/ansible-role-virt_install_import](https://github.com/stafwag/ansible-role-virt_install_import)
-  * **stafwag.virt_install_vm**:
-    [https://github.com/stafwag/ansible-role-virt_install_vm](https://github.com/stafwag/ansible-role-virt_install_vm)
-  * **stafwag.etc_hosts**:
-    [https://github.com/stafwag/ansible-role-etc_hosts](https://github.com/stafwag/ansible-role-etc_hosts)
-  * **stafwag.package_update**:
-    [https://github.com/stafwag/ansible-role-package_update](https://github.com/stafwag/ansible-role-package_update)
-
-Install the required roles with
-
-```bash
-$ ansible-galaxy install -r requirements.yml
-```
-
-this will install the latest default branch releases.
-
-Or follow the installation instruction for each role on Ansible Galaxy.
-
-[https://galaxy.ansible.com/stafwag](https://galaxy.ansible.com/stafwag)
-
 # Installation
 
 ## Ansible galaxy
 
-The role is available on [Ansible Galaxy](https://galaxy.ansible.com/stafwag/virt_install_import).
+The role is available on [Ansible Galaxy](https://galaxy.ansible.com/stafwag/delegated_vm_install).
 
 To install the role from Ansible Galaxy execute the command below. 
 
@@ -62,6 +31,8 @@ $ git clone https://github.com/stafwag/ansible-role-virt_install_vm
 
 and put into the [role search path](https://docs.ansible.com/ansible/2.4/playbooks_reuse_roles.html#role-search-path)
 
+## Requirements
+
 ### Supported GNU/Linux Distributions
 
 It should work on most GNU/Linux distributions.
@@ -75,16 +46,69 @@ to use the role on Centos/RedHat 8.
 * RedHat 7
 * Ubuntu
 
-## Role Variables and templates
+### Roles
 
-# Variables
+The role is a wrapper around the following roles:
 
-## Virtual Machine specific
+  * **stafwag.libvirt**:
+    [https://github.com/stafwag/ansible-role-libvirt](https://github.com/stafwag/ansible-role-libvirt)
+  * **stafwag.qemu_img**:
+    [https://github.com/stafwag/ansible-role-qemu_img](https://github.com/stafwag/ansible-role-qemu_img)
+  * **stafwag.cloud_localds**:
+    [https://github.com/stafwag/ansible-role-cloud_localds](https://github.com/stafwag/ansible-role-cloud_localds)
+  * **stafwag.virt_install_import**:
+    [https://github.com/stafwag/ansible-role-virt_install_import](https://github.com/stafwag/ansible-role-virt_install_import)
+  * **stafwag.virt_install_vm**:
+    [https://github.com/stafwag/ansible-role-virt_install_vm](https://github.com/stafwag/ansible-role-virt_install_vm)
+  * **stafwag.etc_hosts**:
+    [https://github.com/stafwag/ansible-role-etc_hosts](https://github.com/stafwag/ansible-role-etc_hosts)
+  * **stafwag.package_update**:
+    [https://github.com/stafwag/ansible-role-package_update](https://github.com/stafwag/ansible-role-package_update)
+
+#### Ansible galaxy
+
+When you installed the role with Ansible galaxy. The roles is installed in your ```ANSIBLE_ROLES_PATH```.
+If not specified ```${HOME}/.ansible/roles/``` is used.
+
+Go to the installed role
+
+```bash
+$ cd ~/.ansible/roles/stafwag.delegated_vm_install/
+```
+
+To install the required roles from Ansible galaxy execute
+
+```bash
+$ ansible-galaxy install -r requirements.yml
+```
+
+will install the latest version available on Ansible galaxy.
+
+Or follow the installation instructions for each role on Ansible Galaxy.
+
+[https://galaxy.ansible.com/stafwag](https://galaxy.ansible.com/stafwag)
+
+#### Source (github)
+
+To install the required role from source code execute.
+
+```bash
+$ ansible-galaxy install -r requirements.yml
+```
+
+this will install the latest default branch.
+
+
+# Role Variables and templates
+
+## Variables
+
+### Virtual Machine specific
 
 * **vm_ip_address**: Required. The virtual machine ip address.
 * **vm_kvm_host**: Required. The hypervisor host the role will delegate the installation.
 
-## Input
+### Input
 
 The ```delegated_vm_install``` hash is used for the defaults to set up the virtual machine.
 If you need to overwrite for a virtual machine or host group, you can use the ```delegated_vm_install_overwrite``` hash.
@@ -153,7 +177,7 @@ Both hashes will be merged, if a variable is in both hashes the values of ```del
     The overwrite hash. This allows you to overwrite the above settings. Can be useful to have specific global settings,
     and overwrite values for a virtual machine.
 
-## Return variables
+### Return variables
 
 * **vm**:
   * **hostname**: The virtual machine hostname.

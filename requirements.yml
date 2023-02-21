@@ -1,15 +1,6 @@
 ---
-- src: https://github.com/stafwag/ansible-role-qemu_img
-  name: stafwag.qemu_img
-
-- src: https://github.com/stafwag/ansible-role-cloud_localds
-  name: stafwag.cloud_localds
-
-- src: https://github.com/stafwag/ansible-role-virt_install_import
-  name: stafwag.virt_install_import
-
-- src: https://github.com/stafwag/ansible-role-virt_install_vm
-  name: stafwag.virt_install_vm
-
-- src: https://github.com/stafwag/ansible-role-etc_hosts
-  name: stafwag.etc_hosts
+- src: stafwag.qemu_img
+- src: stafwag.cloud_localds
+- src: stafwag.virt_install_import
+- src: stafwag.virt_install_vm
+- src: stafwag.etc_hosts
