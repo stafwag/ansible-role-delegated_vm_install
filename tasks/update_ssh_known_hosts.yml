@@ -7,16 +7,18 @@
     - never
     - debug
 
-#
 # Update ssh host key in known_hosts
+#
 # Set become to false
 # ssh connection will be established as the "normal" ansible
 # user normally
 #
-#
+# throttle to 1, to avoid that the ssh host key remove fails because the
+# known_hosts.old already exsists
 - name: Remove ssh host key in known_hosts
   delegate_to: localhost
   become: false
+  throttle: 1
   known_hosts:
     name: "{{ ansible_host }}"
     state: absent
