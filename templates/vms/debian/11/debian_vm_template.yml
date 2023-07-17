@@ -1,3 +1,4 @@
+---
 virt_install_vm:
   skip_if_deployed:
     true
