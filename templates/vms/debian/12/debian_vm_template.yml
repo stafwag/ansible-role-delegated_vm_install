@@ -28,7 +28,7 @@ cloud_localds:
           "{{ vm.ip_address }}/{{ vm.ip_prefix | default('24') }}"
         gateway:
           "{{ vm.gateway }}"
-    disable_cloud_init: false
+    disable_cloud_init: true
     reboot:
       "{{ vm.reboot }}"
     poweroff:

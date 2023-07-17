@@ -24,14 +24,14 @@ k3s_cluster:
             - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
   hosts:
     k3s-master001:
-      ansible_host: 192.168.122.20
+      ansible_host: 192.168.122.73
       vm_ip_address: "{{ ansible_host }}"
       vm_kvm_host: localhost
     k3s-master002:
-      ansible_host: 192.168.122.21
+      ansible_host: 192.168.122.74
       vm_ip_address: "{{ ansible_host }}"
       vm_kvm_host: localhost
     k3s-master003:
-      ansible_host: 192.168.122.22
+      ansible_host: 192.168.122.75
       vm_ip_address: "{{ ansible_host }}"
       vm_kvm_host: localhost

@@ -21,6 +21,6 @@ vms:
             - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
   hosts:
     debian12-single-node:
-      ansible_host: 192.168.122.62
+      ansible_host: 192.168.122.72
       vm_ip_address: "{{ ansible_host }}"
       vm_kvm_host: localhost
