@@ -93,7 +93,7 @@ Or follow the installation instructions for each role on Ansible Galaxy.
 To install the required role from source code execute.
 
 ```bash
-$ ansible-galaxy install -r requirements.yml
+$ ansible-galaxy install -r requirements_from_source.yml
 ```
 
 this will install the latest default branch.
