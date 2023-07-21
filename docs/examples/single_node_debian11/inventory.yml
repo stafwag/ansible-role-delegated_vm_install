@@ -1,0 +1,26 @@
+---
+vms:
+  vars:
+    ansible_user: ansible
+    ansible_python_interpreter: /usr/bin/python3
+    delegated_vm_install:
+      vm:
+        template: templates/vms/debian/11/debian_vm_template.yml 
+        path: /var/lib/libvirt/images/delegated/single+node/debian11
+        boot_disk:
+          src:
+            ~/Downloads/debian-11-generic-amd64-daily.qcow2
+          size: 50G
+        memory: 2048
+        cpus: 2
+        dns_nameservers: 9.9.9.9
+        gateway: 192.168.122.1
+        default_user:
+          passwd: false
+          ssh_authorized_keys:
+            - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+  hosts:
+    debian11-single-node:
+      ansible_host: 192.168.122.71
+      vm_ip_address: "{{ ansible_host }}"
+      vm_kvm_host: localhost

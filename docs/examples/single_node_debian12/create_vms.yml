@@ -1,0 +1,9 @@
+---
+- name: Setup the virtual machine
+  hosts: vms
+  become: true
+  gather_facts: false
+  roles:
+    - role: stafwag.delegated_vm_install
+      vars:
+        ansible_ssh_common_args: "-o StrictHostKeyChecking=no"

@@ -33,7 +33,7 @@
 # to be able to overwrite the values on a single vm
 - name: Overwrite vm
   set_fact:
-      _vm: "{{ _vm | combine( delegated_vm_install_overwrite.vm ) }}"
+    _vm: "{{ _vm | combine( delegated_vm_install_overwrite.vm ) }}"
   when:
     - delegated_vm_install_overwrite is defined
     - delegated_vm_install_overwrite.vm is defined
@@ -279,6 +279,8 @@
         "{{ _hostname }}"
       ip_address:
         "{{ vm_ip_address }}"
+      ip_prefix:
+        "{{ vm_ip_prefix | default('24') }}"
       path:
         "/var/lib/libvirt/images/"
       reboot:
@@ -341,7 +343,7 @@
 # load the template
 - name: Load the vm template
   include_vars:
-    "{{ _vm.template | default('templates/vms/debian_vm_template.yml') }}"
+    "{{ _vm.template | default('templates/vms/debian/12/debian_vm_template.yml') }}"
 
 - name: Display cloud_localds debug info
   debug:

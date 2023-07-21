@@ -1,3 +1,4 @@
+---
 virt_install_vm:
   skip_if_deployed:
     true
@@ -24,7 +25,7 @@ cloud_localds:
         name:
           "{{ vm.interface | default('enp1s0') }}"
         address:
-          "{{ vm.ip_address }}"
+          "{{ vm.ip_address }}/{{ vm.ip_prefix | default('24') }}"
         gateway:
           "{{ vm.gateway }}"
     disable_cloud_init: true

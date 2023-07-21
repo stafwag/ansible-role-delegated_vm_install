@@ -93,7 +93,7 @@ Or follow the installation instructions for each role on Ansible Galaxy.
 To install the required role from source code execute.
 
 ```bash
-$ ansible-galaxy install -r requirements.yml
+$ ansible-galaxy install -r requirements_from_source.yml
 ```
 
 this will install the latest default branch.
@@ -151,7 +151,7 @@ Both hashes will be merged, if a variable is in both hashes the values of ```del
 
       The virtual machine settings.
 
-      * **template**: Optional. Default. ```templates/vms/debian_vm_template.yml``` The virtual machine template.
+      * **template**: Optional. Default. ```templates/vms/debian/12/debian_vm_template.yml``` The virtual machine template.
       * **hostname**: Optional. Default: ```{{ inventory_hostname }}```. The vm hostname.
       * **path**: Optional. Default: ```/var/lib/libvirt/images/```
       * **boot_disk**: Required
@@ -187,6 +187,7 @@ Both hashes will be merged, if a variable is in both hashes the values of ```del
   * **dns_search**: Optional. Default ```''```
   * **interface**: Optional. Default ```enp1s0```
   * **vm.ip_adress***: Required. The vm ip address.
+  * **vm.ip_prefix**: Optional. Default ```24```
   * **vm.gateway**: Required. The vm gateway.
   * **qemu_img**: An array the qemu_img disks
   * **virt_install_import.disks**:  Disk string array. Used by 
@@ -200,9 +201,10 @@ Create a inventory.
 * inventory_vms.yml
 
 ```yaml
+---
 k3s_cluster:
   vars:
-    ansible_user: staf
+    ansible_user: ansible
     ansible_python_interpreter: /usr/bin/python3
     delegated_vm_install:
       vm:
@@ -251,7 +253,7 @@ k3s_cluster:
   roles:
     - role: stafwag.delegated_vm_install
       vars:
-        ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
+        ansible_ssh_common_args: "-o StrictHostKeyChecking=no"
 ```
 
 ## Run the playbook
