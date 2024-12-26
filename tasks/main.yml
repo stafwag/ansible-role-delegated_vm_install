@@ -6,6 +6,10 @@
   when:
     - vm_kvm_host is not defined
 
+- name: Gather facts on {{ vm_kvm_host }}
+  setup:
+  delegate_to: "{{ vm_kvm_host }}"
+
 - name: Install the virtual machines
   import_tasks: delegate_vms.yml
   delegate_to: "{{ vm_kvm_host }}"
