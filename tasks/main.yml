@@ -6,9 +6,16 @@
   when:
     - vm_kvm_host is not defined
 
+#
+# It's required to have the facts for the vm_kvm_hosts
+# to able to install the required packages with the roles
+# that are called from this role.
+#
 - name: Gather facts on {{ vm_kvm_host }}
   setup:
   delegate_to: "{{ vm_kvm_host }}"
+  tags:
+    - install
 
 - name: Install the virtual machines
   import_tasks: delegate_vms.yml
