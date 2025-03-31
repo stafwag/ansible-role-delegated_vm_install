@@ -1,6 +1,6 @@
 ---
 - name: Verify if vm_kvm_host is defined
-  fail:
+  ansible.builtin.fail:
     msg:
       - "Sorry, I need the vm_kvm_host variable to continue"
   when:
@@ -15,26 +15,26 @@
 # is executed multiple times. e.g. During a delegated_to execution.
 #
 - name: Gather facts on {{ vm_kvm_host }}
-  setup:
+  ansible.builtin.setup:
   delegate_to: "{{ vm_kvm_host }}"
   run_once: true
   tags:
     - install
 
 - name: Install the virtual machines
-  import_tasks: delegate_vms.yml
+  ansible.builtin.import_tasks: delegate_vms.yml
   delegate_to: "{{ vm_kvm_host }}"
 
 - name: Wait for the nodes to come online
-  include_tasks: wait.yml
+  ansible.builtin.include_tasks: wait.yml
   when:
     - virt_install_vm_installed
 
-- name: Post actions 
-  include_tasks: post.yml
+- name: Post actions
+  ansible.builtin.include_tasks: post.yml
   when:
     - virt_install_vm_installed or
       _post.always
 
 - name: Wait for the nodes to come online
-  include_tasks: wait.yml
+  ansible.builtin.include_tasks: wait.yml
