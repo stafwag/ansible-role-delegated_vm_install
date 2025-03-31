@@ -1,14 +1,14 @@
 ---
 - name: Post configuration started
-  debug:
+  ansible.builtin.debug:
     msg:
-      - " ost configuration started"
+      - "Post configuration started"
   tags:
     - never
     - debug
 
 - name: Display _post
-  debug:
+  ansible.builtin.debug:
     msg:
       - "_post: {{ _post }}"
   tags:
@@ -16,7 +16,7 @@
     - debug
 
 - name: Display virt_install_vm_installed
-  debug:
+  ansible.builtin.debug:
     msg:
       - "virt_install_vm_installed: {{ virt_install_vm_installed }}"
   tags:
@@ -24,30 +24,30 @@
     - debug
 
 - name: Update etc_hosts
-  block:
-    - name: Gather facts
-      setup:
-
-    - name: Setup etc hosts
-      include_tasks: etc_hosts.yml
   when:
     - _post.update_etc_hosts
+  block:
+    - name: Gather facts
+      ansible.builtin.setup:
+
+    - name: Setup etc hosts
+      ansible.builtin.include_tasks: etc_hosts.yml
 
 - name: Update ssh known_hosts
-  include_tasks: update_ssh_known_hosts.yml
+  ansible.builtin.include_tasks: update_ssh_known_hosts.yml
   when:
     - _post.update_ssh_known_hosts
     - virt_install_vm_installed
 
 - name: Update the all packages
-  import_role:
+  ansible.builtin.import_role:
     name:
       stafwag.package_update
   notify:
-      Reboot_after_update
+    Reboot_after_update
   when:
     - _post.package_update
 
 - name: Flush handlers to force the reboot handler
-  meta:
+  ansible.builtin.meta:
     flush_handlers
