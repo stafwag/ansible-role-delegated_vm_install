@@ -358,7 +358,6 @@
 #
 - name: Create vm directory
   include_tasks: create_vm_dir.yml
-  run_once: true
 
 - name: Include it
   import_role: 
