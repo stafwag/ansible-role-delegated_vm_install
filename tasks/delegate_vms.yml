@@ -1,6 +1,6 @@
 ---
 - name: Show delegated_vm_install
-  debug:
+  ansible.builtin.debug:
     msg:
       - "Show delegated_vm_install: {{ delegated_vm_install }}"
   tags:
@@ -9,18 +9,18 @@
 
 # Create a copy of the vm hash
 - name: Create temporary _vm
-  set_fact:
+  ansible.builtin.set_fact:
     _vm: "{{ delegated_vm_install.vm | default({}) }}"
 
 - name: Show _vm
-  debug:
+  ansible.builtin.debug:
     msg: "_vm = {{ _vm }}"
   tags:
     - never
     - debug
 
 - name: Show delegated_vm_install_overwrite.vm
-  debug:
+  ansible.builtin.debug:
     msg: "delegated_vm_install_overwrite.vm  = {{ delegated_vm_install_overwrite }}"
   tags:
     - never
@@ -32,40 +32,40 @@
 # Overwrite if delegated_vm_install is defined
 # to be able to overwrite the values on a single vm
 - name: Overwrite vm
-  set_fact:
-    _vm: "{{ _vm | combine( delegated_vm_install_overwrite.vm ) }}"
+  ansible.builtin.set_fact:
+    _vm: "{{ _vm | combine(delegated_vm_install_overwrite.vm) }}"
   when:
     - delegated_vm_install_overwrite is defined
     - delegated_vm_install_overwrite.vm is defined
 
 - name: Show the result _vm
-  debug:
+  ansible.builtin.debug:
     msg: "_vm = {{ _vm }}"
   tags:
     - never
     - debug
 
 - name: Fail if boot_disk.src is not defined
-  fail:
+  ansible.builtin.fail:
     msg:
       - "Sorry I need a source image"
   when:
     - _vm.boot_disk.src is not defined
 
 - name: Fail if gateway is not defined
-  fail:
+  ansible.builtin.fail:
     msg:
       - "Sorry I need a gateway"
   when:
     - _vm.gateway is not defined
 
 - name: Set _hostname
-  set_fact:
+  ansible.builtin.set_fact:
     _hostname:
       "{{ _vm.hostname | default(inventory_hostname) }}"
 
 - name: Debug
-  debug:
+  ansible.builtin.debug:
     msg:
       - "_hostname = {{ _hostname }}"
   tags:
@@ -74,7 +74,7 @@
 
 # Create _security hash with permission settngs.
 - name: Set default security settings
-  set_fact:
+  ansible.builtin.set_fact:
     _security:
       file:
         owner:
@@ -93,14 +93,14 @@
 
 # Get the defined security settings
 - name: Set _defined_security
-  set_fact:
+  ansible.builtin.set_fact:
     _defined_security:
       "{{ delegated_vm_install.security | default({}) }}"
 
 - name: Overwrite the _defined_security
-  set_fact:
+  ansible.builtin.set_fact:
     _defined_security:
-      "{{ _defined_security | combine(delegated_vm_install_overwrite.security) }}" 
+      "{{ _defined_security | combine(delegated_vm_install_overwrite.security) }}"
   when:
     - delegated_vm_install_overwrite is defined
     - delegated_vm_install_overwrite.security is defined
@@ -108,12 +108,12 @@
 # Combine the security hashes, when the security settings aren't defined
 # by the user the default values are used.
 - name: Combine the security hashes
-  set_fact:
+  ansible.builtin.set_fact:
     _security:
       "{{ _security | combine(_defined_security) }}"
 
 - name: Debug
-  debug:
+  ansible.builtin.debug:
     msg:
       - "_security = {{ _security }}"
   tags:
@@ -122,39 +122,39 @@
 
 # Get the defined post actions
 - name: Set the default post actions
-  set_fact:
+  ansible.builtin.set_fact:
     _post:
       pause:
         seconds:
           5
       update_etc_hosts:
-        True
+        true
       ensure_running:
-        True
+        true
       package_update:
-        True
+        true
       reboot_after_update:
-        True
+        true
       always:
-        False
+        false
       update_ssh_known_hosts:
-        False
+        false
 
 - name: Get the defined post actions
-  set_fact:
+  ansible.builtin.set_fact:
     _defined_post:
       "{{ delegated_vm_install.post | default({}) }}"
 
 - name: Overwrite the _defined_post
-  set_fact:
+  ansible.builtin.set_fact:
     _defined_post:
-      "{{ _defined_post | combine(delegated_vm_install_overwrite.post) }}" 
+      "{{ _defined_post | combine(delegated_vm_install_overwrite.post) }}"
   when:
     - delegated_vm_install_overwrite is defined
     - delegated_vm_install_overwrite.post is defined
 
 - name: Debug _post before combime
-  debug:
+  ansible.builtin.debug:
     msg:
       - "_post = {{ _post }}"
   tags:
@@ -162,7 +162,7 @@
     - debug
 
 - name: Debug _defined_post before combime
-  debug:
+  ansible.builtin.debug:
     msg:
       - "_defined_post = {{ _defined_post }}"
   tags:
@@ -172,12 +172,12 @@
 # Combine the post hashes, when the post settings aren't defined
 # by the user the default values are used.
 - name: Combine the post hashes
-  set_fact:
+  ansible.builtin.set_fact:
     _post:
-      "{{ _post | combine(  _defined_post  ) }}"
+      "{{ _post | combine(_defined_post) }}"
 
 - name: Debug
-  debug:
+  ansible.builtin.debug:
     msg:
       - "_post = {{ _post }}"
   tags:
@@ -187,7 +187,7 @@
 # Create an array with the qemu_disks
 # The boot_disk is the first disk.
 - name: Create _qemu_img array
-  set_fact:
+  ansible.builtin.set_fact:
     _qemu_img:
       - dest:
           "{{ _vm.path }}/{{ _hostname }}.qcow2"
@@ -205,13 +205,13 @@
           "{{ _security.file.mode }}"
 
 - name: Loop over the additional disks
-  include_tasks: add_disk.yml
+  ansible.builtin.include_tasks: add_disk.yml
   loop: "{{ _vm.disks | default([]) }}"
   loop_control:
     loop_var: _disk
 
 - name: Display the _qemu_img array
-  debug:
+  ansible.builtin.debug:
     msg:
       "_qemu_img = {{ _qemu_img }}"
   tags:
@@ -219,18 +219,18 @@
     - debug
 
 - name: Create _disk_strings array
-  set_fact:
-    _disk_strings: 
+  ansible.builtin.set_fact:
+    _disk_strings:
       - "{{ _vm.path }}/{{ _hostname }}_cloudinit.iso,device=cdrom"
 
 - name: Loop over the qemu disk
-  include_tasks: add_disk_string.yml
+  ansible.builtin.include_tasks: add_disk_string.yml
   loop: "{{ _qemu_img }}"
   loop_control:
     loop_var: _qemu_disk
 
 - name: Display the _disk_strings array
-  debug:
+  ansible.builtin.debug:
     msg:
       "_disk_strings = {{ _disk_strings }}"
   tags:
@@ -239,14 +239,14 @@
 
 # Create the default user hash
 - name: Set the defaults for the _default_user
-  set_fact:
+  ansible.builtin.set_fact:
     _default_user:
-      name: "{{ ansible_user | default( lookup('env','USER') ) }}"
+      name: "{{ ansible_user | default(lookup('env', 'USER')) }}"
       passwd: false
       ssh_authorized_keys: ""
 
 - name: DEBUG show _default_user
-  debug:
+  ansible.builtin.debug:
     msg:
       - "DEBUG _default_user = {{ _default_user }}"
   tags:
@@ -254,26 +254,26 @@
     - never
 
 - name: Set the _defined_default_user
-  set_fact:
+  ansible.builtin.set_fact:
     _defined_default_user:
       "{{ _vm.default_user | default({}) }}"
 
 - name: Overwrite the _defined_default_user
-  set_fact:
+  ansible.builtin.set_fact:
     _defined_default_user:
-      "{{ _defined_default_user | combine(delegated_vm_install_overwrite.default_user) }}" 
+      "{{ _defined_default_user | combine(delegated_vm_install_overwrite.default_user) }}"
   when:
     - delegated_vm_install_overwrite is defined
     - delegated_vm_install_overwrite.default_user is defined
 
 - name: Overwite default_user the values
-  set_fact:
+  ansible.builtin.set_fact:
     _default_user:
       "{{ _default_user | combine(_defined_default_user) }}"
 
 # Create the vm return hash
 - name: Set required vm variables
-  set_fact:
+  ansible.builtin.set_fact:
     vm:
       hostname:
         "{{ _hostname }}"
@@ -284,9 +284,9 @@
       path:
         "/var/lib/libvirt/images/"
       reboot:
-        False
+        false
       poweroff:
-        True
+        true
       commands:
         []
       wait:
@@ -298,7 +298,7 @@
           "{{ _disk_strings }}"
 
 - name: Display vm
-  debug:
+  ansible.builtin.debug:
     msg:
       "vm = {{ vm }}"
   tags:
@@ -306,7 +306,7 @@
     - debug
 
 - name: Display _vm
-  debug:
+  ansible.builtin.debug:
     msg:
       "vm = {{ vm }}"
   tags:
@@ -315,26 +315,26 @@
 
 # Overwrite the provided vm data
 - name: Combine vm and _vm
-  set_fact:
-    vm: "{{ vm | combine( _vm ) }}"
+  ansible.builtin.set_fact:
+    vm: "{{ vm | combine(_vm) }}"
 
 - name: Merge default_user
-  set_fact:
-    vm: "{{ vm | combine( { 'default_user': _default_user } ) }}" 
+  ansible.builtin.set_fact:
+    vm: "{{ vm | combine({'default_user': _default_user}) }}"
 
 - name: Display the default user name
-  debug:
+  ansible.builtin.debug:
     msg:
       - "default user name = {{ vm.default_user.name }}"
 
-- name: Verify if we have a default user name 
-  fail:
+- name: Verify if we have a default user name
+  ansible.builtin.fail:
     msg: "Sorry, we need to have a default user name."
   when:
     - not vm.default_user.name
 
 - name: Show the result vm
-  debug:
+  ansible.builtin.debug:
     msg: "vm = {{ vm }}"
   tags:
     - never
@@ -342,11 +342,11 @@
 
 # load the template
 - name: Load the vm template
-  include_vars:
+  ansible.builtin.include_vars:
     "{{ _vm.template | default('templates/vms/debian/12/debian_vm_template.yml') }}"
 
 - name: Display cloud_localds debug info
-  debug:
+  ansible.builtin.debug:
     msg:
       - "cloud_localds = {{ cloud_localds }}"
   tags:
@@ -357,15 +357,15 @@
 # Create the vm destination directory if not exists
 #
 - name: Create vm directory
-  include_tasks: create_vm_dir.yml
+  ansible.builtin.include_tasks: create_vm_dir.yml
 
 - name: Include it
-  import_role: 
+  ansible.builtin.import_role:
     name:
       stafwag.virt_install_vm
 
 - name: Display virt_install_vm_installed
-  debug:
+  ansible.builtin.debug:
     msg:
       - "virt_install_vm_installed: {{ virt_install_vm_installed }}"
   tags:
@@ -373,14 +373,14 @@
     - debug
 
 - name: Pause the play
-  pause:
+  ansible.builtin.pause:
     "{{ _post.pause }}"
   when:
     - _post.pause
     - virt_install_vm_installed
 
 - name: Ensure that the vm is running
-  virt:
+  community.libvirt.virt:
     name: "{{ vm.hostname }}"
     state: running
   when:
