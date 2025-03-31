@@ -1,6 +1,6 @@
 ---
 - name: Display _qemu_disk
-  debug:
+  ansible.builtin.debug:
     msg:
       - "_qemu_disk = {{ _qemu_disk }}"
   tags:
@@ -8,12 +8,12 @@
     - debug
 
 - name: Create disk string
-  set_fact:
+  ansible.builtin.set_fact:
     _disk_string:
       "{{ _qemu_disk.dest }},device=disk"
 
 - name: Display _disk_string
-  debug:
+  ansible.builtin.debug:
     msg:
       "_disk_string = {{ _disk_string }}"
   tags:
@@ -21,12 +21,12 @@
     - debug
 
 - name: Add the disk to _disk_strings
-  set_fact:
+  ansible.builtin.set_fact:
     _disk_strings:
-      "{{ _disk_strings + [ _disk_string ] }}"
+      "{{ _disk_strings + [_disk_string] }}"
 
 - name: Display _disk_strings
-  debug:
+  ansible.builtin.debug:
     msg:
       "_disk_strings = {{ _disk_strings }}"
   tags:

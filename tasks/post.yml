@@ -44,7 +44,7 @@
     name:
       stafwag.package_update
   notify:
-      reboot_after_update
+      Reboot_after_update
   when:
     - _post.package_update
 

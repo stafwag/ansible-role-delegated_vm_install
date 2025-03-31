@@ -8,12 +8,16 @@
 
 #
 # It's required to have the facts for the vm_kvm_hosts
-# to able to install the required packages with the roles
+# to able to install the necessary packages with the roles
 # that are called from this role.
+#
+# run_once is setup only to get the facts once when the role
+# is executed multiple times. e.g. During a delegated_to execution.
 #
 - name: Gather facts on {{ vm_kvm_host }}
   setup:
   delegate_to: "{{ vm_kvm_host }}"
+  run_once: true
   tags:
     - install
 

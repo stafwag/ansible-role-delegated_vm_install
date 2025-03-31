@@ -1,6 +1,7 @@
 ---
 galaxy_info:
   role_name: delegated_vm_install
+  namespace: stafwag
   author: staf wagemakers <staf@wagemakers.be>
   description: An Ansible role to install a libvirt virtual machine with virt-install and cloud-init. (Delegated)
   license: license (BSD, MIT)
@@ -29,6 +30,6 @@ galaxy_info:
         - all
   galaxy_tags:
     - system
-    - cloud-init
+    - cloudinit
     - virtualization
 dependencies: []

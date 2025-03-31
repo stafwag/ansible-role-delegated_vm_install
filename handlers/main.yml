@@ -1,5 +1,5 @@
 ---
-- name: reboot_after_update
-  reboot:
+- name: Reboot_after_update
+  ansible.builtin.reboot:
   when:
     - _post.reboot_after_update
