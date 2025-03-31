@@ -1,0 +1,24 @@
+---
+#
+# Create the vm destination directory if not exists
+#
+- name: "Verify if {{ vm.path }} exists"
+  stat:
+    path:
+      "{{ vm.path }}"
+  register:
+    stat_vm_path
+
+- name: "Create {{ vm.path }}"
+  file:
+    path:
+      "{{ vm.path }}"
+    owner:
+      "{{ _security.dir.owner }}"
+    group:
+      "{{ _security.dir.group }}"
+    mode:
+      "{{ _security.dir.mode }}"
+    recurse: yes
+  when:
+    - not stat_vm_path.stat.exists
