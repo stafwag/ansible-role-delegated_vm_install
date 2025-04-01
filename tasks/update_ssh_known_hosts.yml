@@ -1,6 +1,6 @@
 ---
 - name: Debug display ansible host
-  debug:
+  ansible.builtin.debug:
     msg:
       - "ansible_host: {{ ansible_host }}"
   tags:
@@ -19,7 +19,7 @@
   delegate_to: localhost
   become: false
   throttle: 1
-  known_hosts:
+  ansible.builtin.known_hosts:
     name: "{{ ansible_host }}"
     state: absent
 
@@ -28,4 +28,4 @@
   become: false
   vars:
     ansible_ssh_common_args: '-o StrictHostKeyChecking=no'
-  ping:
+  ansible.builtin.ping:

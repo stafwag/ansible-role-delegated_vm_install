@@ -1,6 +1,6 @@
 ---
-- name: wait for connection
-  wait_for_connection:
+- name: Wait for connection
+  ansible.builtin.wait_for_connection:
     connect_timeout: 20
     sleep: 5
     delay: 0

@@ -2,15 +2,15 @@
 #
 # Create the vm destination directory if not exists
 #
-- name: "Verify if {{ vm.path }} exists"
-  stat:
+- name: "Verify if  vm.path exists {{ vm.path }}"
+  ansible.builtin.stat:
     path:
       "{{ vm.path }}"
   register:
     stat_vm_path
 
 - name: "Create {{ vm.path }}"
-  file:
+  ansible.builtin.file:
     path:
       "{{ vm.path }}"
     owner:
@@ -19,6 +19,6 @@
       "{{ _security.dir.group }}"
     mode:
       "{{ _security.dir.mode }}"
-    recurse: yes
+    recurse: true
   when:
     - not stat_vm_path.stat.exists
