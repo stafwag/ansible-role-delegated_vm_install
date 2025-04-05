@@ -36,15 +36,19 @@ and put into the [role search path](https://docs.ansible.com/ansible/2.4/playboo
 ### Supported GNU/Linux Distributions
 
 It should work on most GNU/Linux distributions.
-```cloud-localds``` is required. ```cloud-localds``` was available on
-Centos/RedHat 7 but not on Redhat 8. You'll need to install it manually
-to use the role on Centos/RedHat 8.
+
+On Linux distributions that have the ```cloud-localds``` package available the
+ ```cloud-localds``` command is used to create an iso image with the cloud-init
+ configuration.
+
+On Distributions that don't provide the cloud-localds, the ```xorriso``` command
+is used to create the iso image.
+
+The playbook is tested on:
 
 * Archlinux
-* Debian
-* Centos 7
-* RedHat 7
-* Ubuntu
+* Debian Family
+* RedHat Family
 
 ### Roles
 
