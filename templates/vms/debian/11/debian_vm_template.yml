@@ -41,7 +41,7 @@ virt_install_import:
   os_type: Linux
   os_variant: debian10
   network: "{{ vm.network | default('network:default') }}"
-  graphics: spice
+  graphics: vnc
   memory: "{{ vm.memory | default(4096) }}"
   vcpu: "{{ vm.cpus | default(2) }}"
   disks:
