@@ -82,14 +82,14 @@
         group:
           kvm
         mode:
-          660
+          "0660"
       dir:
         owner:
           root
         group:
           root
         mode:
-          751
+          "0751"
 
 # Get the defined security settings
 - name: Set _defined_security
