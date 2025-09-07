@@ -6,7 +6,7 @@ vms:
     delegated_vm_install:
       vm:
         template: templates/vms/debian/12/debian_vm_template.yml 
-        path: /var/lib/libvirt/images/delegated/single+node/debian12
+        path: /var/lib/libvirt/images/delegated/single_node/debian12
         boot_disk:
           src:
             ~/Downloads/debian-12-generic-amd64-daily.qcow2

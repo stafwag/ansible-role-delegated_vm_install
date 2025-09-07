@@ -14,7 +14,7 @@
     - debug
 
 - name: Create _qemu_img_disk
-  builtin.set_fact:
+  ansible.builtin.set_fact:
     _qemu_img_disk:
       dest:
         "{{ _vm.path }}/{{ _disk.name }}"
@@ -23,18 +23,18 @@
       mode: "{{ _security.file.mode }}"
 
 - name: Combine
-  builtin.set_fact:
+  ansible.builtin.set_fact:
     _qemu_img_disk:
       "{{ _qemu_img_disk | combine(_disk) }}"
 
 - name: Display the _qemu_img_disk
-  builtin.debug:
+  ansible.builtin.debug:
     msg: "_qemu_img_disk = {{ _qemu_img_disk }}"
   tags:
     - never
     - debug
 
 - name: Add the disk to the qemu_img array
-  builtin.set_fact:
+  ansible.builtin.set_fact:
     _qemu_img:
       "{{ _qemu_img + [_qemu_img_disk] }}"
