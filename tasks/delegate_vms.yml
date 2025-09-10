@@ -376,7 +376,7 @@
   ansible.builtin.pause:
     "{{ _post.pause }}"
   when:
-    - _post.pause
+    - _post.pause is defined
     - virt_install_vm_installed
 
 - name: Ensure that the vm is running
