@@ -18,7 +18,7 @@ vms:
         default_user:
           passwd: false
           ssh_authorized_keys:
-            - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+            - "{{ lookup('file', '~/.ssh/ansible_ssh_key.pub') }}"
   hosts:
     debian12-single-node:
       ansible_host: 192.168.122.72
