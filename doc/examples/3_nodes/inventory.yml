@@ -5,10 +5,13 @@ k3s_cluster:
     ansible_python_interpreter: /usr/bin/python3
     delegated_vm_install:
       vm:
+#	Debian 13 is (currently) the default template
+# 	Set if you want to use a different template
+#       template: templates/vms/debian/13/debian_vm_template.yml
         path: /var/lib/libvirt/images/k3s/
         boot_disk:
           src:
-            ~/Downloads/debian-12-generic-amd64-daily.qcow2
+            ~/Downloads/debian-13-generic-amd64-daily.qcow2
           size: 50G
         disks: 
           - name: "{{ inventory_hostname }}_zfsdata.qcow2"
@@ -21,7 +24,7 @@ k3s_cluster:
         default_user:
           passwd: false
           ssh_authorized_keys:
-            - "{{ lookup('file', '~/.ssh/id_rsa.pub') }}"
+            - "{{ lookup('file', '~/.ssh/ansible_ssh_key.pub') }}"
   hosts:
     k3s-master001:
       ansible_host: 192.168.122.73
