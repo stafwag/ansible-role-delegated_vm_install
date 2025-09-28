@@ -343,7 +343,7 @@
 # load the template
 - name: Load the vm template
   ansible.builtin.include_vars:
-    "{{ _vm.template | default('templates/vms/debian/12/debian_vm_template.yml') }}"
+    "{{ _vm.template | default('templates/vms/debian/13/debian_vm_template.yml') }}"
 
 - name: Display cloud_localds debug info
   ansible.builtin.debug:
