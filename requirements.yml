@@ -4,3 +4,4 @@
 - src: stafwag.virt_install_import
 - src: stafwag.virt_install_vm
 - src: stafwag.etc_hosts
+- src: stafwag.package_update
