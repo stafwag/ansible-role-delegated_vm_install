@@ -1,4 +1,7 @@
 ---
+- src: https://github.com/stafwag/ansible-role-libvirt
+  name: stafwag.libvirt
+
 - src: https://github.com/stafwag/ansible-role-qemu_img
   name: stafwag.qemu_img
 
@@ -13,3 +16,6 @@
 
 - src: https://github.com/stafwag/ansible-role-etc_hosts
   name: stafwag.etc_hosts
+
+- src: https://github.com/stafwag/ansible-role-package_update
+  name: stafwag.package_update
